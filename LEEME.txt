@@ -1,0 +1,168 @@
+TO BUILD KRATOS:
+
+1 - Remember to set first KRATOS_SOURCE env bar: export KRATOS_SOURCE=/path/to/kratos/
+2 - Run /path/to/kratos/scripts/standard.configure, changing some things (see below)
+3 - Run make install in linux()
+
+
+TO INCLUDE MMG REMESHING 
+https://github.com/KratosMultiphysics/Kratos/wiki/%5BUtilities%5D-MMG-Process
+
+1. 
+You have also to modify first line of config.sh (or config.bat) inside MeshingApplication/custom_external_libraries/mmg
+# Configure
+cmake ../mmg                
+
+
+2. 
+
+-DINCLUDE_MMG=ON    \
+-DMMG_ROOT="${KRATOS_SOURCE}/applications/MeshingApplication/custom_external_libraries/mmg/build"
+
+
+THESE ARE THE PYTHON SCRIPTS
+
+~/Numerico/Kratos-9.5/bin/Release/KratosMultiphysics
+
+
+PARA USAR: 
+export PYTHONPATH=$PYTHONPATH:/home/weldform-pc/Numerico/Kratos-9.5/bin/Release
+(aca busca el modulo KratosMultiphysics, ver ultimo pn)
+
+ir a un ejemplo que tenga MainKratos.py
+
+
+---------------------------------- PARA COMPILAR
+
+
+
+1. Execute ./standard configure (que se cambio para agregar librerias, SACAR BINARIOS POR DEF)
+Adding 
+export KRATOS_APPLICATIONS=
+add_app ${KRATOS_APP_DIR}/LinearSolversApplication
+add_app ${KRATOS_APP_DIR}/StructuralMechanicsApplication
+add_app ${KRATOS_APP_DIR}/FluidDynamicsApplication
+add_app ${KRATOS_APP_DIR}/PfemApplication
+add_app ${KRATOS_APP_DIR}/PfemSolidMechanicsApplication
+add_app ${KRATOS_APP_DIR}/PFEM2Application
+add_app ${KRATOS_APP_DIR}/MPMApplication
+
+And 
+
+# Configure
+cmake -H"${KRATOS_SOURCE}" -B"${KRATOS_BUILD}/${KRATOS_BUILD_TYPE}" \
+-DUSE_MPI=OFF                                                       \
+-DUSE_TRIANGLE_NONFREE_TPL=ON                                      \
+-DUSE_EIGEN_MKL=OFF                                                 \
+-DKRATOS_GENERATE_PYTHON_STUBS=ON                                  
+
+
+2. make install . This create bin folder inside kratos (which is being ommited in git).
+Inside bin, is Release folder in which is "KratosMultiphysics"
+
+3.
+ESTO ES PARA QUE PYTHON LO LEA EN LINUX, ULTIMO PASO; PREVIAMENTE HACIENDO MAKE INSTALL
+export PYTHONPATH=/home/weldform-pc/Numerico/Kratos/bin/Release
+
+4.
+Replace inside MainPfem.py:
+#import MainSolid
+
+CON
+
+import KratosMultiphysics.SolidMechanicsApplication.solid_analysis as MainSolid
+
+
+6
+EN testfactory reemplazar
+
+import KratosMultiphysics.PfemApplication.MainPfem 
+con
+
+import KratosMultiphysics.PfemApplication.MainPfem as MainPfem
+
+en 
+
+
+7. Inside solid_analysis.py replace
+        #self.t0p = timer.clock()
+        self.t0p = timer.process_time()
+        
+        
+8. In mainpfem comment all function definition:
+_get_processes_parameters       
+
+9. Change in DelaunayMeshingApplication/remesh_domains_process.py
+No module named 'meshing_domain'. Puede colocarse mesh_domain en el directorio del script como solucion rápida
+
+10. Important how to convert mesh to MDPA
+https://github.com/KratosMultiphysics/Kratos/wiki/Converting-Gmsh-mesh-format-to-MDPA
+
+
+
+ATTENTION EL MATERIAL
+ve/johnson_cook_thermal_plastic_axisym_2D_law.hpp:		/// Counted pointer of JohnsonCookThermalPlastic2DAxisymLaw
+applications/MPMApplication/custom_constitutive/johnson_cook_thermal_plastic_axisym_2D_law.hpp:		
+
+
+https://github.com/KratosMultiphysics/Kratos/blob/master/INSTALL.md
+
+/media/weldform-pc/Datos/Luciano/Numerico/Kratos
+
+export KRATOS_SOURCE=/home/weldform-pc/Numerico/Kratos
+export KRATOS_BUILD=/home/weldform-pc/Numerico/Kratos_bin
+
+/media/weldform-pc/Datos/Luciano/Numerico/Kratos/standard_configure.sh
+
+CUANDO SE HACE EL MAKE INSTALL SE PASA TODO A $KRATOS_SOURCE/BIN
+
+export PYTHONPATH=$PYTHONPATH:/home/weldform-pc/Numerico/Kratos_bin/Release
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/Kratos/bin/libs
+
+export PYTHONPATH=$PYTHONPATH:$KRATOS_SOURCE/bin
+
+
+
+
+
+***************************
+VER MAKE INSTALL
+***************************
+
+
+base) weldform-pc@weldform:~/Numerico/Kratos_bin/Release$ make install
+[  1%] Built target gidpost
+[  1%] Built target KratosVersion
+[  2%] Built target tinyexpr
+[  2%] Built target clipper
+Consolidate compiler generated dependencies of target KratosCore
+[ 59%] Built target KratosCore
+Consolidate compiler generated dependencies of target Kratos
+[ 66%] Built target Kratos
+Consolidate compiler generated dependencies of target KratosLinearSolversCore
+[ 67%] Built target KratosLinearSolversCore
+Consolidate compiler generated dependencies of target KratosLinearSolversApplication
+[ 67%] Built target KratosLinearSolversApplication
+Consolidate compiler generated dependencies of target KratosStructuralMechanicsCore
+[ 83%] Built target KratosStructuralMechanicsCore
+Consolidate compiler generated dependencies of target KratosStructuralMechanicsApplication
+[ 84%] Built target KratosStructuralMechanicsApplication
+Consolidate compiler generated dependencies of target KratosFluidDynamicsCore
+[ 99%] Built target KratosFluidDynamicsCore
+Consolidate compiler generated dependencies of target KratosFluidDynamicsApplication
+[100%] Built target KratosFluidDynamicsApplication
+Install the project...
+-- Install configuration: "Release"
+-- Deleting: /home/weldform-pc/Numerico/Kratos/bin/Release/KratosMultiphysics
+-- Deleting: /home/weldform-pc/Numerico/Kratos/bin/Release/libs
+-- Set runtime path of "/home/weldform-pc/Numerico/Kratos/bin/Release/libs/Kratos.cpython-310-x86_64-linux-gnu.so" to "$ORIGIN/../libs"
+-- Set runtime path of "/home/weldform-pc/Numerico/Kratos/bin/Release/libs/libKratosCore.so" to "$ORIGIN/../libs"
+-- Set runtime path of "/home/weldform-pc/Numerico/Kratos/bin/Release/libs/libKratosLinearSolversCore.so" to "$ORIGIN/../libs"
+-- Set runtime path of "/home/weldform-pc/Numerico/Kratos/bin/Release/libs/KratosLinearSolversApplication.cpython-310-x86_64-linux-gnu.so" to "$ORIGIN/../libs"
+-- Set runtime path of "/home/weldform-pc/Numerico/Kratos/bin/Release/libs/libKratosStructuralMechanicsCore.so" to "$ORIGIN/../libs"
+-- Set runtime path of "/home/weldform-pc/Numerico/Kratos/bin/Release/libs/KratosStructuralMechanicsApplication.cpython-310-x86_64-linux-gnu.so" to "$ORIGIN/../libs"
+-- Set runtime path of "/home/weldform-pc/Numerico/Kratos/bin/Release/libs/libKratosFluidDynamicsCore.so" to "$ORIGIN/../libs"
+-- Set runtime path of "/home/weldform-pc/Numerico/Kratos/bin/Release/libs/KratosFluidDynamicsApplication.cpython-310-x86_64-linux-gnu.so" to "$ORIGIN/../libs"
+-- Trying to install python stub files to enable python hinting support for cpp libraries in IDEs...
+Please install mypy using  "pip install mypy" to generate pyi stub files for libraries generated by pybind11.
+
