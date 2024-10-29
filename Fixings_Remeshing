@@ -4,6 +4,10 @@
     import python_solvers_wrapper_adaptative_remeshing_contact_structural
 ModuleNotFoundError: No module named 'python_solvers_wrapper_adaptative_remeshing_contact_structural'
 
+REPLACE (Line 185): 
+        import python_solvers_wrapper_adaptative_remeshing_contact_structural
+WITH        
+from . import python_solvers_wrapper_adaptative_remeshing_contact_structural
 
 2.
 
