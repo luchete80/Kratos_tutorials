@@ -32,3 +32,43 @@ in adaptative_remeshing_contact_structural_mechanics_utilities.py", line 21
     self.mmg_process = MeshingApplication.MmgProcess3D(self.main_model_part, mmg_parameters)
 AttributeError: module 'KratosMultiphysics.MeshingApplication' has no attribute 'MmgProcess3D'. Did you mean: 'mmg_process'?
 
+This error Disappears when ading MMG
+
+4. FINALLY BEGINS TO RUN!!!!
+
+Importing    LinearSolversApplication 
+    Kratos  _     _                       ____        _
+           | |   (_)_ __   ___  __ _ _ __/ ___|  ___ | |_   _____ _ __ ___
+           | |   | | '_ \ / _ \/ _` | '__\___ \ / _ \| \ \ / / _ \ '__/ __|
+           | |___| | | | |  __/ (_| | |   ___) | (_) | |\ V /  __/ |  \__ \
+           |_____|_|_| |_|\___|\__,_|_|  |____/ \___/|_| \_/ \___|_|  |___/
+Initializing KratosLinearSolversApplication...
+Linear-Solver-Factory: Creating "sparse_lu" as fastest available direct solver 
+::[Contact Mechanical Solver]:: : Using MixedULMLinearSolver, definition of ALM parameters recommended 
+BuilderAndSolver: Clear Function called
+::[MechanicalSolver]:: : Finished initialization. 
+::[KSM Simulation]:: : Analysis -START-  
+[WARNING] ::[Contact Mechanical Static Solver]:: : Legacy way to consider time stepping by intervals. Use time_step_table instead 
+::[KSM Simulation]:: : STEP:  1 
+::[KSM Simulation]:: : TIME:  0.01 
+BuilderAndSolver: Clear Function called
+::[MechanicalSolver]:: : Initializing ... 
+BuilderAndSolver: Clear Function called
+::[MechanicalSolver]:: : Finished initialization. 
+[WARNING] StructuralMechanicsAnalysis: STEP:  1 
+[WARNING] StructuralMechanicsAnalysis: TIME:  0.01 
+[WARNING] ::[Contact Mechanical Static Solver]:: : Legacy way to consider time stepping by intervals. Use time_step_table instead 
+
+
+APPEAR THIS ERROR!
+  File "/home/weldform-pc/Numerico/Kratos-9.5/bin/Release/KratosMultiphysics/analysis_stage.py", line 144, in InitializeSolutionStep
+    self.ApplyBoundaryConditions() #here the processes are called
+  File "/home/weldform-pc/Numerico/Kratos-9.5/bin/Release/KratosMultiphysics/analysis_stage.py", line 221, in ApplyBoundaryConditions
+    process.ExecuteInitializeSolutionStep()
+  File "/home/weldform-pc/Numerico/Kratos-9.5/bin/Release/KratosMultiphysics/ContactStructuralMechanicsApplication/alm_contact_process.py", line 222, in ExecuteInitializeSolutionStep
+    super().ExecuteInitializeSolutionStep()
+  File "/home/weldform-pc/Numerico/Kratos-9.5/bin/Release/KratosMultiphysics/ContactStructuralMechanicsApplication/search_base_process.py", line 223, in ExecuteInitializeSolutionStep
+    self.search_utility_list[key].ExecuteInitializeSolutionStep()
+RuntimeError: Error: There is no sub model part with name "ComputingContact" in model part "Structure"
+
+
